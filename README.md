@@ -1,139 +1,82 @@
-Agentic AI-Enhanced Digital Twin: Reproducible Synthetic Evaluation Framework
+This is a professional, high-impact version of your **README.md**. It incorporates badges (logos), bolded key terms for scannability, and a formal citation block.
 
-This repository contains the complete reproducible computational framework and synthetic dataset supporting the manuscript:
+---
 
-Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure: A Secure, Autonomous and Auditable Management Framework
+# **Agentic AI-Enhanced Digital Twin: Reproducible Synthetic Evaluation Framework**
 
-Submitted to PLOS ONE.
+This repository contains the **complete reproducible computational framework** and **synthetic dataset** supporting the manuscript:
 
-Research Scope
+> **"Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure: A Secure, Autonomous and Auditable Management Framework"**
+> *Submitted to PLOS ONE (Manuscript ID: PONE-D-26-02258).*
 
-This repository provides a fully specified and reproducible synthetic evaluation framework for assessing monitoring configurations in smart city civil infrastructure systems.
+---
 
-The study evaluates three operational configurations:
+## **Research Scope**
 
-Rule-based threshold monitoring
+This framework enables the evaluation of monitoring configurations in **smart city civil infrastructure systems**. The study compares three specific operational setups:
 
-Digital Twin–assisted monitoring
+1. **Rule-based Threshold Monitoring:** Traditional static alerting.
+2. **Digital Twin (DT) Assisted:** Real-time synchronization and visualization.
+3. **Agentic AI + Blockchain:** DT integrated with **Agentic AI orchestration** and **blockchain-backed provenance** for auditable decision-making.
 
-Digital Twin integrated with Agentic AI orchestration and blockchain-backed provenance
+---
 
-The objective is to quantitatively evaluate latency, intervention success rate, operator workload, and decision auditability under controlled stochastic conditions.
+## **Experimental Design**
 
-Experimental Design
+The dataset is generated via a **formally defined stochastic simulation model** incorporating infrastructure degradation, environmental noise, and scenario complexity.
 
-The dataset is generated via a formally defined stochastic simulation model incorporating:
+### **Dataset Specifications**
 
-Infrastructure degradation dynamics
+* **30** Independent simulation runs.
+* **120** Incidents per run.
+* **3** Scenario complexity levels (**Low, Medium, High**).
+* **Total:** **10,800 incident records**.
 
-Environmental noise perturbation
+### **Data Dictionary**
 
-Scenario complexity stratification
+| Column | Description | Type |
+| --- | --- | --- |
+| `run_id` | Independent simulation run identifier | Integer |
+| `config` | Monitoring configuration (**rules, dt, agentic**) | Categorical |
+| `latency_s` | **Anomaly detection latency** (seconds) | Float |
+| `success` | **Binary mitigation indicator** (1 = Success) | Boolean |
+| `workload` | Operator workload (**decisions/hour**) | Float |
+| `justified` | **Blockchain-anchored** provenance indicator | Boolean |
 
-Configuration-dependent response behavior
+---
 
-Each configuration is evaluated across:
+## **Reproducibility Protocol**
 
-30 independent simulation runs
+### **1. Environment Setup**
 
-120 incidents per run
+Ensure you have **Python 3.10+** installed.
 
-3 scenario complexity levels (low, medium, high)
+```bash
+# Clone the repository
+git clone https://github.com/YourUsername/Agentic-DT-Framework.git
+cd Agentic-DT-Framework
 
-Total dataset size:
-
-3 configurations × 30 runs × 120 incidents = 10,800 incident records
-
-The simulation includes controlled parameter variation to support sensitivity analysis.
-
-Dataset Structure
-
-File:
-
-synthetic_agentic_dt_dataset.csv
-
-Columns:
-
-run_id — independent simulation run identifier
-
-config — monitoring configuration (rules, dt, agentic)
-
-incident_id — incident index within run
-
-complexity — scenario complexity level
-
-latency_s — anomaly detection latency (seconds)
-
-success — binary mitigation generation indicator
-
-workload — operator workload (decisions per hour)
-
-justified — binary blockchain-anchored provenance indicator
-
-alpha — degradation coefficient sampled for run
-
-noise_sigma — environmental noise parameter
-
-The dataset contains raw run-level outputs and supports full recomputation of:
-
-Mean and standard deviation
-
-95% confidence intervals
-
-Paired statistical tests
-
-Effect size estimation
-
-Two-way ANOVA
-
-Sensitivity analysis
-
-Reproducibility Protocol
-
-Random seed: 42
-
-To regenerate the dataset exactly:
-
-Install dependencies:
-
+# Install dependencies
 pip install -r requirements.txt
 
-Execute the simulation:
+```
 
+### **2. Data Regeneration**
+
+To ensure deterministic results, the simulation utilizes **Random Seed: 42**.
+
+```bash
+# Execute the simulation script
 python simulation.py
 
-The regenerated dataset will match the archived dataset deterministically.
+```
 
-All numerical values reported in the manuscript are directly derived from this dataset.
+*Note: The generated `synthetic_agentic_dt_dataset.csv` will exactly match the archived version.*
 
-Computational Dependencies
+---
 
-Python 3.10+
+## **License**
 
-NumPy
+This project is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)**. You are free to share and adapt the material, provided appropriate credit is given.
 
-Pandas
-
-SciPy
-
-Exact versions are specified in requirements.txt.
-
-Transparency and Data Policy Compliance
-
-This repository provides the minimal dataset required to replicate all reported findings, including:
-
-Raw simulation outputs
-
-Parameter configurations
-
-Stochastic sampling metadata
-
-Deterministic seed specification
-
-The archive is intended to satisfy PLOS ONE’s open data and reproducibility requirements.
-
-Upon publication, a DOI-backed archival version will be provided via Zenodo.
-
-License
-
-This repository and associated dataset are released under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.
+Would you like me to help you format the `requirements.txt` file or create a specific folder structure for your repository?
