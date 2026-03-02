@@ -39,9 +39,7 @@ The dataset is generated via a **stochastic infrastructure degradation model** i
 * **3 monitoring configurations**
 * **Total dataset size: 10,800 incident records**
 
-[
-3 \text{ configurations} \times 30 \text{ runs} \times 120 \text{ incidents} = 10,800
-]
+3 configurations × 30 runs × 120 incidents = 10,800
 
 ---
 
