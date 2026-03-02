@@ -1,16 +1,16 @@
-**Agentic AI-Enhanced Digital Twin: Reproducible Synthetic Evaluation Framework
-**
+Agentic AI-Enhanced Digital Twin: Reproducible Synthetic Evaluation Framework
+
 This repository contains the complete reproducible computational framework and synthetic dataset supporting the manuscript:
 
-**Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure: A Secure, Autonomous and Auditable Management Framework
-**
+Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure: A Secure, Autonomous and Auditable Management Framework
+
 Submitted to PLOS ONE.
 
-**Research Scope**
+Research Scope
 
 This repository provides a fully specified and reproducible synthetic evaluation framework for assessing monitoring configurations in smart city civil infrastructure systems.
 
-**The study evaluates three operational configurations:**
+The study evaluates three operational configurations:
 
 Rule-based threshold monitoring
 
@@ -20,8 +20,8 @@ Digital Twin integrated with Agentic AI orchestration and blockchain-backed prov
 
 The objective is to quantitatively evaluate latency, intervention success rate, operator workload, and decision auditability under controlled stochastic conditions.
 
-**Experimental Design
-**
+Experimental Design
+
 The dataset is generated via a formally defined stochastic simulation model incorporating:
 
 Infrastructure degradation dynamics
@@ -46,8 +46,8 @@ Total dataset size:
 
 The simulation includes controlled parameter variation to support sensitivity analysis.
 
-**Dataset Structure
-**
+Dataset Structure
+
 File:
 
 synthetic_agentic_dt_dataset.csv
@@ -88,9 +88,8 @@ Two-way ANOVA
 
 Sensitivity analysis
 
+Reproducibility Protocol
 
-**Reproducibility Protocol
-**
 Random seed: 42
 
 To regenerate the dataset exactly:
@@ -107,9 +106,8 @@ The regenerated dataset will match the archived dataset deterministically.
 
 All numerical values reported in the manuscript are directly derived from this dataset.
 
+Computational Dependencies
 
-**Computational Dependencies
-**
 Python 3.10+
 
 NumPy
@@ -120,9 +118,8 @@ SciPy
 
 Exact versions are specified in requirements.txt.
 
+Transparency and Data Policy Compliance
 
-**Transparency and Data Policy Compliance
-**
 This repository provides the minimal dataset required to replicate all reported findings, including:
 
 Raw simulation outputs
@@ -137,6 +134,6 @@ The archive is intended to satisfy PLOS ONE’s open data and reproducibility re
 
 Upon publication, a DOI-backed archival version will be provided via Zenodo.
 
-**License
-**
+License
+
 This repository and associated dataset are released under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.
