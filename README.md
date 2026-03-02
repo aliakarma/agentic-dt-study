@@ -136,26 +136,6 @@ The framework is designed to enable independent verification and secondary stati
 
 ---
 
-## **Citation**
-
-If this dataset or framework is used in academic work, please cite:
-
-Akarma, A. (2026). *Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure: A Secure, Autonomous and Auditable Management Framework.* Manuscript under review.
-
-BibTeX entry:
-
-```bibtex
-@article{akarma2026agentic,
-  title={Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure},
-  author={Akarma, Ali},
-  year={2026},
-  note={Manuscript under review},
-  url={https://github.com/YourUsername/agentic-dt-framework}
-}
-```
-
----
-
 ## **License**
 
 This project is released under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** license.
