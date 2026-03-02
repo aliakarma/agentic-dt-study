@@ -1,5 +1,3 @@
----
-
 # **Agentic AI-Enhanced Digital Twin: Reproducible Synthetic Evaluation Framework**
 
 This repository contains the **fully reproducible simulation framework** and **synthetic dataset** supporting the research study:
