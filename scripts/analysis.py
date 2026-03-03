@@ -1,22 +1,3 @@
-"""
-analysis.py — Statistical evaluation of monitoring configuration performance
-=============================================================================
-
-Produces the full statistical battery reported in the manuscript:
-  1. Descriptive statistics (mean, SD, 95% CI) per config × complexity
-  2. Normality screening (Shapiro-Wilk)
-  3. Parametric: independent-samples t-tests (Welch's)
-  4. Non-parametric: Mann-Whitney U (reported alongside t-tests)
-  5. Effect sizes: Cohen's d and rank-biserial correlation r
-  6. Two-way ANOVA: Configuration × Complexity (Type II SS)
-  7. Post-hoc pairwise comparisons with Bonferroni correction
-  8. Success rate comparison: Chi-squared tests
-  9. Sensitivity analysis: latency/success vs. degradation parameters
- 10. Workload and justification summary
-
-All outputs mirror the tables and figures described in the paper.
-"""
-
 import pandas as pd
 import numpy as np
 from scipy import stats
