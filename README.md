@@ -2,7 +2,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Reproducible](https://img.shields.io/badge/Reproducibility-Seed%3A42-green.svg)]()
 [![DOI](https://zenodo.org/badge/1171037652.svg)](https://doi.org/10.5281/zenodo.18843087)
 
 **Supporting repository for:**
