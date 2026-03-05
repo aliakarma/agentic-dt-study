@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software or dataset in your research, please cite both this repository and the associated PLOS ONE article."
 
-title: "Agentic Digital Twin Study: Simulation Code and Synthetic Dataset for Infrastructure Resilience Research"
+title: "Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure: A Secure, Autonomous and Auditable Management Framework"
 
 # Authors
 authors:
@@ -11,7 +11,6 @@ authors:
     affiliation: "AI Center, Faculty of Computer and Information Systems, Islamic University of Madinah, Saudi Arabia"
     email: "toqeer@iu.edu.sa"
     orcid: "https://orcid.org/0000-0002-3936-5483"
-    equal-contribution: true
 
   # Corresponding author 2
   - family-names: "Akarma"
@@ -19,7 +18,6 @@ authors:
     affiliation: "AI Center, Faculty of Computer and Information Systems, Islamic University of Madinah, Saudi Arabia"
     email: "443059463@stu.iu.edu.sa"
     orcid: "https://orcid.org/0009-0002-6687-9380"
-    equal-contribution: true
 
   # Co-author 3
   - family-names: "Alatify"
