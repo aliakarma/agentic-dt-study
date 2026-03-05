@@ -1,0 +1,80 @@
+cff-version: 1.2.0
+message: "If you use this software or dataset in your research, please cite both this repository and the associated PLOS ONE article."
+
+title: "Agentic Digital Twin Study: Simulation Code and Synthetic Dataset for Infrastructure Resilience Research"
+
+# Authors
+authors:
+  # Corresponding author 1
+  - family-names: "Syed"
+    given-names: "Toqeer Ali"
+    affiliation: "AI Center, Faculty of Computer and Information Systems, Islamic University of Madinah, Saudi Arabia"
+    email: "toqeer@iu.edu.sa"
+    orcid: "https://orcid.org/0000-0002-3936-5483"
+    equal-contribution: true
+
+  # Corresponding author 2
+  - family-names: "Akarma"
+    given-names: "Ali"
+    affiliation: "AI Center, Faculty of Computer and Information Systems, Islamic University of Madinah, Saudi Arabia"
+    email: "443059463@stu.iu.edu.sa"
+    orcid: "https://orcid.org/0009-0002-6687-9380"
+    equal-contribution: true
+
+  # Co-author 3
+  - family-names: "Alatify"
+    given-names: "Ali"
+    affiliation: "Department of Civil Engineering, Prince Sattam Bin Abdulaziz University, Saudi Arabia"
+
+  # Co-author 4
+  - family-names: "Naqash"
+    given-names: "Muhammad Tayyab"
+    affiliation: "Civil Engineering Department, Faculty of Engineering, Islamic University of Madinah, Saudi Arabia"
+
+  # Co-author 5
+  - family-names: "Alqurashi"
+    given-names: "Abdulaziz"
+    affiliation: "Civil Engineering Department, Faculty of Engineering, Islamic University of Madinah, Saudi Arabia"
+
+# Versioning & persistence
+version: "2.0.0"
+date-released: 2026-03-05
+doi: "10.5281/zenodo.18849073"
+url: "https://github.com/aliakarma/agentic-dt-study"
+
+# Licensing & discovery
+license: "CC-BY-4.0"
+
+# Repository & artifact links
+repository-code: "https://github.com/aliakarma/agentic-dt-study"
+repository-artifact: "https://zenodo.org/records/18849073"
+
+# Preferred citation for the associated journal article
+preferred-citation:
+  type: article
+  title: "Agentic AI for Infrastructure Resilience: A Digital Twin Simulation Study"
+  authors:
+    - family-names: "Syed"
+      given-names: "Toqeer Ali"
+    - family-names: "Akarma"
+      given-names: "Ali"
+    - family-names: "Alatify"
+      given-names: "Ali"
+    - family-names: "Naqash"
+      given-names: "Muhammad Tayyab"
+    - family-names: "Alqurashi"
+      given-names: "Abdulaziz"
+  journal: "PLOS ONE"
+  year: 2026
+  volume: "[pending]"
+  issue: "[pending]"
+  page-first: "[pending]"
+  page-last: "[pending]"
+  doi: "[journal DOI pending]"
+  url: "https://doi.org/[journal DOI pending]"
+
+contact:
+  - name: "Toqeer Ali Syed"
+    email: "toqeer@iu.edu.sa"
+  - name: "Ali Akarma"
+    email: "443059463@stu.iu.edu.sa"
