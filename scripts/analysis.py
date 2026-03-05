@@ -231,7 +231,7 @@ for config in CONFIGS:
 # ═══════════════════════════════════════════════════════════════
 # 10. Run-level aggregated statistics (for paper Table 1)
 # ═══════════════════════════════════════════════════════════════
-sep("10. RUN-LEVEL MEANS (Table 1 — suitable for paper)")
+sep("10. RUN-LEVEL MEANS (Table 1 — in Manuscript)")
 
 run_means = (
     df.groupby(["config", "run_id"])[["latency_s", "success", "workload", "justified"]]
