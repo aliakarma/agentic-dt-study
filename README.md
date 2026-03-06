@@ -1,10 +1,17 @@
 <div align="center">
 
-<!-- Hero Logo / Banner -->
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=14&duration=0&pause=1000&color=64B5F6&center=true&vCenter=true&repeat=false&width=700&lines=AGENTIC+AI-ENHANCED+DIGITAL+TWIN+FRAMEWORK" />
-  <img alt="Project Banner" src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=14&duration=0&pause=1000&color=1565C0&center=true&vCenter=true&repeat=false&width=700&lines=AGENTIC+AI-ENHANCED+DIGITAL+TWIN+FRAMEWORK" />
-</picture>
+  <!-- Banner Image -->
+  <img src="banner.png" alt="Project Banner" width="100%" />
+
+  <br/><br/>
+
+  <!-- Animated Typing SVG -->
+  <img 
+    alt="Project Title"
+    src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=14&duration=0&pause=1000&color=1565C0&center=true&vCenter=true&repeat=false&width=700&lines=AGENTIC+AI-ENHANCED+DIGITAL+TWIN+FRAMEWORK"
+  />
+
+</div>
 
 # Agentic AI-Enhanced Digital Twin
 ## Reproducible Synthetic Evaluation Framework
