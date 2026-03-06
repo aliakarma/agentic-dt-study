@@ -3,46 +3,51 @@
   <!-- Banner Image -->
   <img src="banner.png" alt="Project Banner" width="100%" />
 
-  <br/><br/>
+  <br/>
 
   <!-- Animated Typing SVG -->
-  <img 
-    alt=""
+  <img
+    alt="Agentic AI-Enhanced Digital Twin Framework"
     src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=14&duration=0&pause=1000&color=1565C0&center=true&vCenter=true&repeat=false&width=700&lines=AGENTIC+AI-ENHANCED+DIGITAL+TWIN+FRAMEWORK"
   />
 
+  <h1>Agentic AI-Enhanced Digital Twin</h1>
+  <h3>Reproducible Synthetic Evaluation Framework</h3>
+
+  <br/>
+
+  <!-- Primary Badges -->
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" /></a>
+  <a href="https://numpy.org/"><img src="https://img.shields.io/badge/NumPy-1.26.4-013243?style=for-the-badge&logo=numpy&logoColor=white" /></a>
+  <a href="https://pandas.pydata.org/"><img src="https://img.shields.io/badge/Pandas-2.2.2-150458?style=for-the-badge&logo=pandas&logoColor=white" /></a>
+  <a href="https://scipy.org/"><img src="https://img.shields.io/badge/SciPy-1.11.4-8CAAE6?style=for-the-badge&logo=scipy&logoColor=white" /></a>
+
+  <br/><br/>
+
+  <a href="https://creativecommons.org/licenses/by/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=for-the-badge&logo=creativecommons&logoColor=white" /></a>
+  <a href="https://doi.org/10.5281/zenodo.18843087"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18843087-blue?style=for-the-badge&logo=zenodo&logoColor=white" /></a>
+  <img src="https://img.shields.io/badge/Manuscript-Under%20Review-orange?style=for-the-badge&logoColor=white" />
+
+  <br/><br/>
+
+  <!-- Topic Tags -->
+  <img src="https://img.shields.io/badge/Smart%20City-Infrastructure-1a73e8?style=flat-square&logo=cityMapper&logoColor=white" />
+  <img src="https://img.shields.io/badge/Structural%20Health-Monitoring-2e7d32?style=flat-square&logoColor=white" />
+  <img src="https://img.shields.io/badge/Reproducible-Research-7b1fa2?style=flat-square&logo=jupyter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Blockchain-Audit%20Trail-f57c00?style=flat-square&logo=ethereum&logoColor=white" />
+
+  <br/><br/>
+
+  <blockquote>
+    <strong>Supporting repository for:</strong><br/>
+    <em>"Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure:<br/>
+    A Secure, Autonomous and Auditable Management Framework."</em><br/>
+    — Manuscript under review.
+  </blockquote>
+
 </div>
 
-# Agentic AI-Enhanced Digital Twin
-## Reproducible Synthetic Evaluation Framework
-
-<br/>
-
-<!-- Badges -->
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![NumPy](https://img.shields.io/badge/NumPy-1.26.4-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org/)
-[![Pandas](https://img.shields.io/badge/Pandas-2.2.2-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![SciPy](https://img.shields.io/badge/SciPy-1.11.4-8CAAE6?style=for-the-badge&logo=scipy&logoColor=white)](https://scipy.org/)
-
-[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=for-the-badge&logo=creativecommons&logoColor=white)](https://creativecommons.org/licenses/by/4.0/)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18843087-blue?style=for-the-badge&logo=zenodo&logoColor=white)](https://doi.org/10.5281/zenodo.18843087)
-[![Status](https://img.shields.io/badge/Manuscript-Under%20Review-orange?style=for-the-badge&logo=academia&logoColor=white)]()
-
-<br/>
-
-<img src="https://img.shields.io/badge/Smart%20City-Infrastructure-1a73e8?style=flat-square&logo=cityMapper&logoColor=white" />
-<img src="https://img.shields.io/badge/Structural%20Health-Monitoring-2e7d32?style=flat-square&logo=radar&logoColor=white" />
-<img src="https://img.shields.io/badge/Reproducible-Research-7b1fa2?style=flat-square&logo=jupyter&logoColor=white" />
-<img src="https://img.shields.io/badge/Blockchain-Audit%20Trail-f57c00?style=flat-square&logo=ethereum&logoColor=white" />
-
-<br/><br/>
-
-> **Supporting repository for:**
-> *"Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure: A Secure, Autonomous and Auditable Management Framework."*
-> — Manuscript under review.
-
 ---
-
 </div>
 
 ## 📋 Table of Contents
