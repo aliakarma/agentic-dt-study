@@ -147,7 +147,7 @@ where `N_shocks(t, window=20)` counts Poisson shocks detected within the last 20
 
 Mitigation success is **not pre-assigned**. For each incident, a Bernoulli trial is drawn with probability:
 
-$$P(\text{success}) = \sigma\!\left(-2.0 + 0.8 \cdot \text{margin\_hours}\right)$$
+$$P(\text{success}) = \sigma\!\left(-2.0 + 0.8 \cdot \Delta t_{\text{margin}}\right)$$
 
 where `margin_hours` = time from detection to projected critical failure (`D ≥ 0.85`), and `σ(·)` is the logistic function.
 
