@@ -11,6 +11,10 @@
     src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=14&duration=0&pause=1000&color=1565C0&center=true&vCenter=true&repeat=false&width=700&lines=AGENTIC+AI-ENHANCED+DIGITAL+TWIN+FRAMEWORK"
   />
   <br/>
+  <h1>
+  🤖 Agentic AI Enhanced Digital Twin 🔄
+</h1>
+
   <!-- Primary Badges -->
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" /></a>
   <a href="https://numpy.org/"><img src="https://img.shields.io/badge/NumPy-1.26.4-013243?style=for-the-badge&logo=numpy&logoColor=white" /></a>
