@@ -114,33 +114,21 @@ Generates an alarm when the noisy sensor reading first exceeds a **static thresh
 
 ---
 
-\subsection{Digital Twin}
+### 🔄 Digital Twin
 
-Implements a \textbf{scalar Kalman filter} \cite{kalman1960} tracking the structural state:
+Implements a **scalar Kalman filter** *(Kalman, 1960)* tracking the structural state:
 
-\paragraph{Prediction step:}
-\begin{align}
-    \hat{x}^{-}(t) &= \hat{x}(t-1)\cdot\bigl(1 + \hat{\alpha}\bigr) \\[4pt]
-    P^{-}(t)        &= P(t-1) + Q
-\end{align}
+**Prediction:**
 
-\paragraph{Update step:}
-\begin{align}
-    K(t)       &= \frac{P^{-}(t)}{P^{-}(t) + R} \\[4pt]
-    \hat{x}(t) &= \hat{x}^{-}(t) + K(t)\cdot\bigl(z(t) - \hat{x}^{-}(t)\bigr)
-\end{align}
+$$\hat{x}^-(t) = \hat{x}(t-1)\cdot(1 + \hat{\alpha}), \qquad P^-(t) = P(t-1) + Q$$
 
-\noindent where $\hat{x}(t)$ is the filtered state estimate, $P(t)$ the error covariance,
-$Q$ the process noise variance, $R$ the measurement noise variance,
-$K(t)$ the Kalman gain, and $\hat{\alpha}$ the estimated degradation rate.
+**Update:**
 
-\noindent An alert fires when the \textbf{projected state 15 steps ahead (1.5 hours)}
-exceeds the threshold:
-\begin{equation}
-    \hat{x}(t + 15) > \tau_{\mathrm{DT}} = 0.70
-\end{equation}
+$$K(t) = \frac{P^-(t)}{P^-(t) + R}, \qquad \hat{x}(t) = \hat{x}^-(t) + K\cdot\bigl(z(t) - \hat{x}^-(t)\bigr)$$
 
-\hrule
+An alert fires when the **projected state 15 steps ahead (1.5 hours)** exceeds $\tau_{\text{DT}} = 0.70$.
+
+---
 
 ### 🤖 Agentic AI
 
