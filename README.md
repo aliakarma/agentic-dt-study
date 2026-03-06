@@ -7,7 +7,7 @@
 
   <!-- Animated Typing SVG -->
   <img 
-    alt="Project Title"
+    alt=""
     src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=14&duration=0&pause=1000&color=1565C0&center=true&vCenter=true&repeat=false&width=700&lines=AGENTIC+AI-ENHANCED+DIGITAL+TWIN+FRAMEWORK"
   />
 
