@@ -20,11 +20,11 @@
   <a href="https://numpy.org/"><img src="https://img.shields.io/badge/NumPy-1.26.4-013243?style=for-the-badge&logo=numpy&logoColor=white" /></a>
   <a href="https://pandas.pydata.org/"><img src="https://img.shields.io/badge/Pandas-2.2.2-150458?style=for-the-badge&logo=pandas&logoColor=white" /></a>
   <a href="https://scipy.org/"><img src="https://img.shields.io/badge/SciPy-1.11.4-8CAAE6?style=for-the-badge&logo=scipy&logoColor=white" /></a>
-  <br/>
+  <br/><br/>
   <a href="https://creativecommons.org/licenses/by/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=for-the-badge&logo=creativecommons&logoColor=white" /></a>
   <a href="https://doi.org/10.5281/zenodo.18843087"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18843087-blue?style=for-the-badge&logo=zenodo&logoColor=white" /></a>
   <img src="https://img.shields.io/badge/Manuscript-Under%20Review-orange?style=for-the-badge&logoColor=white" />
-  <br/>
+  <br/><br/>
   <!-- Topic Tags -->
   <img src="https://img.shields.io/badge/Smart%20City-Infrastructure-1a73e8?style=flat-square&logo=cityMapper&logoColor=white" />
   <img src="https://img.shields.io/badge/Structural%20Health-Monitoring-2e7d32?style=flat-square&logoColor=white" />
