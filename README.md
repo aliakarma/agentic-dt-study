@@ -25,7 +25,6 @@
   <a href="https://doi.org/10.5281/zenodo.18843087"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18843087-blue?style=for-the-badge&logo=zenodo&logoColor=white" /></a>
   <img src="https://img.shields.io/badge/Manuscript-Under%20Review-orange?style=for-the-badge&logoColor=white" />
   <br/><br/>
-  <!-- Topic Tags -->
   <img src="https://img.shields.io/badge/Smart%20City-Infrastructure-1a73e8?style=flat-square&logo=cityMapper&logoColor=white" />
   <img src="https://img.shields.io/badge/Structural%20Health-Monitoring-2e7d32?style=flat-square&logoColor=white" />
   <img src="https://img.shields.io/badge/Reproducible-Research-7b1fa2?style=flat-square&logo=jupyter&logoColor=white" />
