@@ -30,9 +30,8 @@
   <img src="https://img.shields.io/badge/Structural%20Health-Monitoring-2e7d32?style=flat-square&logoColor=white" />
   <img src="https://img.shields.io/badge/Reproducible-Research-7b1fa2?style=flat-square&logo=jupyter&logoColor=white" />
   <img src="https://img.shields.io/badge/Blockchain-Audit%20Trail-f57c00?style=flat-square&logo=ethereum&logoColor=white" />
-
-  <br/><br/>
-
+  <br/>
+  
   <blockquote>
     <strong>Supporting repository for:</strong><br/>
     <em>"Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure:<br/>
@@ -134,11 +133,9 @@ An alert fires when the **projected state 15 steps ahead (1.5 hours)** exceeds $
 
 The agentic layer maintains a Kalman estimate *and* a **shock-context memory**. The adaptive threshold is:
 
-```
-τ_agentic(t) = max(τ_base − 0.04 · N_shocks(t, window=20), 0.30)
-```
+$$\tau_{\text{agentic}}(t) = \max\!\bigl(\tau_{\text{base}} - 0.04 \cdot N_{\text{shocks}}(t,\ \text{window}=20),\ 0.30\bigr)$$
 
-where `N_shocks(t, window=20)` counts Poisson shocks detected within the last 20 timesteps. This models a **PCA (Perception–Conceptualization–Action) agent** that elevates sensitivity following adverse contextual signals, consistent with Endsley's (1995) Situation Awareness model applied to autonomous infrastructure agents.
+where $N_{\text{shocks}}(t,\ \text{window}=20)$ counts Poisson shocks detected within the last 20 timesteps. This models a **PCA (Perception–Conceptualization–Action) agent** that elevates sensitivity following adverse contextual signals, consistent with Endsley's (1995) Situation Awareness model applied to autonomous infrastructure agents.
 
 ---
 
