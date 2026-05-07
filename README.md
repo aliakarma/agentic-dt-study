@@ -134,10 +134,6 @@ An alert fires when the **projected state 15 steps ahead (1.5 hours)** exceeds $
 
 ---
 
-An alert fires when the **projected state 15 steps ahead (1.5 hours)** exceeds $\tau_{\text{DT}} = 0.70$.
-
----
-
 ### 🤖 Agentic AI (Risk-Based Decision Making)
 
 The agentic layer transitions from deterministic thresholds to **Uncertainty-Aware Risk Management**. It utilizes the Digital Twin's covariance matrix $P(t)$ to compute a real-time **Probability of Failure (PoF)**:
@@ -249,6 +245,7 @@ To evaluate the framework's robustness against adversarial conditions, the simul
 | `pof` | Maximum Probability of Failure recorded at detection | `Float` |
 | `fatigue_mult` | Cognitive fatigue multiplier applied to latency | `Float` |
 | `total_cost` | Total economic cost of the incident ($) | `Float` |
+| `window_var_feature` | Minimum windowed variance of sensor signal (ML feature) | `Float` |
 
 ---
 
@@ -264,10 +261,15 @@ The analysis script (`scripts/analysis.py`) produces a comprehensive battery of 
 | 4 | **Mann-Whitney U** | Non-parametric complement with rank-biserial `r` |
 | 5 | **Chi-squared Tests** | Pairwise mitigation success rate comparisons |
 | 6 | **Two-way ANOVA** | Type II SS — Config × Complexity for latency and success |
+| 6b | **Mixed-Effects Model** | Linear Mixed Model accounting for run-level nesting |
 | 7 | **Tukey HSD Post-hoc** | All pairwise group comparisons |
 | 8 | **Effect Sizes** | Cohen's d (parametric) and rank-biserial r (non-parametric) |
 | 9 | **Sensitivity Analysis** | Spearman ρ of α and σ with outcomes |
 | 10 | **Run-level Aggregation** | Table 1 format for manuscript reporting |
+| 11 | **Cyber-Physical Resilience** | ML-validated attack detection (Train/Test split) |
+| 12 | **Economic ROI** | Total Lifecycle Cost comparison across architectures |
+| 13 | **Human Factors** | Cognitive fatigue impact on pipeline latency |
+| 14 | **Reliability Validation** | Out-of-sample RF classifier consistency check |
 
 ---
 
@@ -276,11 +278,15 @@ The analysis script (`scripts/analysis.py`) produces a comprehensive battery of 
 ### 🐍 Environment
 
 ```
-Python       3.10+
-numpy        1.26.4
-pandas       2.2.2
-scipy        1.11.4
-statsmodels  0.14.1
+Python         3.10+
+numpy          1.26.4
+pandas         2.2.2
+scipy          1.11.4
+statsmodels    0.14.1
+matplotlib     3.8.4
+seaborn        0.13.2
+scikit-learn   1.4.2
+tqdm           4.66.1
 ```
 
 ### 🗂️ Repository Structure
