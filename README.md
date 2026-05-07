@@ -241,6 +241,11 @@ statsmodels  0.14.1
 agentic-dt-framework/
 ├── 📁 data/
 │   └── synthetic_agentic_dt_dataset.csv
+├── 📁 results/
+│   ├── 📊 latency_boxplot.png
+│   ├── 📊 success_rate_barplot.png
+│   ├── 📊 workload_violinplot.png
+│   └── 📄 [metric]_stats.json
 ├── 📁 scripts/
 │   ├── simulation.py
 │   └── analysis.py
@@ -259,6 +264,7 @@ cd scripts
 python simulation.py
 
 # Run full statistical analysis (including Mixed-Effects Modeling and Logistic Regression)
+# This will generate all plots and JSON files in the /results folder
 python analysis.py
 ```
 
