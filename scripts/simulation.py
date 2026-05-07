@@ -17,7 +17,7 @@ T_MAX       = 600      # maximum simulation timesteps per incident
 DT_HOURS    = 0.10     # timestep duration (hours) → 6-minute resolution
 
 COMPLEXITIES = ["low", "medium", "high"]
-CONFIGS      = ["rules", "dt", "agentic"]
+CONFIGS      = ["rules", "dt", "dt_single_agent", "dt_multi_no_chain", "agentic_full"]
 
 # ─────────────────────────────────────────────────────────────
 # Degradation model parameters (per complexity level)
@@ -77,9 +77,11 @@ AGENTIC_BASE_THRESH  = 0.60   # agentic starting adaptive threshold
 # Represents operator/system response chain, not detection itself.
 # ─────────────────────────────────────────────────────────────
 PIPELINE_S = {
-    "rules":   {"mean": 42, "std": 8},
-    "dt":      {"mean": 18, "std": 4},
-    "agentic": {"mean":  6, "std": 2},
+    "rules":             {"mean": 42, "std": 8},
+    "dt":                {"mean": 18, "std": 4},
+    "dt_single_agent":   {"mean": 18, "std": 4},
+    "dt_multi_no_chain": {"mean":  6, "std": 2},
+    "agentic_full":      {"mean":  6, "std": 2},
 }
 
 # ─────────────────────────────────────────────────────────────
@@ -87,9 +89,11 @@ PIPELINE_S = {
 # literature on control room operations (Hart & Staveland, 1988).
 # ─────────────────────────────────────────────────────────────
 WORKLOAD = {
-    "rules":   {"mean": 32, "std": 4},
-    "dt":      {"mean": 21, "std": 3},
-    "agentic": {"mean":  9, "std": 2},
+    "rules":             {"mean": 32, "std": 4},
+    "dt":                {"mean": 21, "std": 3},
+    "dt_single_agent":   {"mean": 21, "std": 3},
+    "dt_multi_no_chain": {"mean":  9, "std": 2},
+    "agentic_full":      {"mean":  9, "std": 2},
 }
 
 # ─────────────────────────────────────────────────────────────
@@ -99,9 +103,11 @@ WORKLOAD = {
 # Agentic: full chain-of-custody audit trail per decision cycle
 # ─────────────────────────────────────────────────────────────
 JUSTIFIED_PROB = {
-    "rules":   0.00,
-    "dt":      0.15,
-    "agentic": 0.92,
+    "rules":             0.00,
+    "dt":                0.15,
+    "dt_single_agent":   0.15,
+    "dt_multi_no_chain": 0.15,
+    "agentic_full":      0.92,
 }
 
 
@@ -297,7 +303,7 @@ for config in CONFIGS:
             # Detection
             if config == "rules":
                 detect_t = detect_rules(D_obs)
-            elif config == "dt":
+            elif "dt" in config and "multi" not in config:
                 detect_t = detect_dt(D_obs)
             else:
                 detect_t = detect_agentic(D_obs, complexity)
@@ -309,12 +315,26 @@ for config in CONFIGS:
                 # Missed detection: full elapsed time treated as delay
                 algo_delay_s = (T_MAX - onset_t) * DT_HOURS * 3600
 
+            complexity_penalty = {"low": 0, "medium": 5, "high": 15}[complexity]
+
             pl = PIPELINE_S[config]
-            pipeline_s = max(rng.normal(pl["mean"], pl["std"]), 1.0)
+            pipeline_s = max(rng.normal(pl["mean"] + complexity_penalty, pl["std"]), 1.0)
             latency_s  = algo_delay_s + pipeline_s
 
             # Mitigation success
             success = mitigation_success(detect_t, D_true, rng)
+
+            # Adversarial conditions
+            # LLM hallucination penalty for agentic/multi configs
+            if "agentic" in config or "multi" in config:
+                if rng.random() < 0.05: # 5% hallucination rate
+                    success = 0 
+                    latency_s += 120 # Added resolution time
+
+            # Blockchain network delay penalty
+            if config == "agentic_full":
+                if rng.random() < 0.02: # 2% chance of network congestion
+                    latency_s += 300 
 
             # Operator workload
             wl       = WORKLOAD[config]
