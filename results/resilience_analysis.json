@@ -1,0 +1,32 @@
+[
+  {
+    "config":"rules",
+    "attack_detection_rate":0.0,
+    "success_rate_under_attack":0.0,
+    "n_attacks":367
+  },
+  {
+    "config":"dt",
+    "attack_detection_rate":0.0,
+    "success_rate_under_attack":0.0,
+    "n_attacks":359
+  },
+  {
+    "config":"dt_single_agent",
+    "attack_detection_rate":0.0,
+    "success_rate_under_attack":0.0,
+    "n_attacks":360
+  },
+  {
+    "config":"dt_multi_no_chain",
+    "attack_detection_rate":1.0,
+    "success_rate_under_attack":0.5333,
+    "n_attacks":360
+  },
+  {
+    "config":"agentic_full",
+    "attack_detection_rate":1.0,
+    "success_rate_under_attack":0.6114,
+    "n_attacks":368
+  }
+]

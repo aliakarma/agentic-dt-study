@@ -1,0 +1,32 @@
+[
+  {
+    "config":"rules",
+    "Total_Lifecycle_Cost":2963016000,
+    "Mean_Incident_Cost":823060.0,
+    "Std_Cost":741083.61
+  },
+  {
+    "config":"dt",
+    "Total_Lifecycle_Cost":2593944000,
+    "Mean_Incident_Cost":720540.0,
+    "Std_Cost":743233.6899999999
+  },
+  {
+    "config":"dt_single_agent",
+    "Total_Lifecycle_Cost":2723400000,
+    "Mean_Incident_Cost":756500.0,
+    "Std_Cost":744103.35
+  },
+  {
+    "config":"dt_multi_no_chain",
+    "Total_Lifecycle_Cost":1389912000,
+    "Mean_Incident_Cost":386086.67,
+    "Std_Cost":644173.5600000001
+  },
+  {
+    "config":"agentic_full",
+    "Total_Lifecycle_Cost":1333440000,
+    "Mean_Incident_Cost":370400.0,
+    "Std_Cost":633308.02
+  }
+]

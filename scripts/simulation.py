@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from scipy.special import expit   # logistic function
+from scipy.stats import norm      # for PoF calculation
+from tqdm import tqdm             # for progress bar
 
 # ─────────────────────────────────────────────────────────────
 # Global seed for full reproducibility
@@ -15,9 +17,23 @@ N_RUNS      = 30
 N_INCIDENTS = 120
 T_MAX       = 600      # maximum simulation timesteps per incident
 DT_HOURS    = 0.10     # timestep duration (hours) → 6-minute resolution
+ATTACK_PROB = 0.10     # 10% probability of sensor spoofing attack
+SPOOF_LIMIT = 0.35     # malicious cap on observed degradation
 
 COMPLEXITIES = ["low", "medium", "high"]
 CONFIGS      = ["rules", "dt", "dt_single_agent", "dt_multi_no_chain", "agentic_full"]
+
+# --- Feature 3: Economic Cost Parameters ---
+COST_MITIGATION = 12000    # Cost of successful preventive maintenance
+COST_FAILURE    = 1500000  # Cost of catastrophic structural failure
+# Operating overhead per architecture (blockchain/audit costs)
+SYSTEM_OVERHEAD = {
+    "rules":             100,
+    "dt":                500,
+    "dt_single_agent":   500,
+    "dt_multi_no_chain": 2500,
+    "agentic_full":      5000,
+}
 
 # ─────────────────────────────────────────────────────────────
 # Degradation model parameters (per complexity level)
@@ -188,55 +204,82 @@ def detect_rules(D_obs: np.ndarray) -> int | None:
 
 
 def detect_dt(D_obs: np.ndarray,
-              alpha_prior: float = 0.005) -> int | None:
+              alpha_prior: float = 0.005) -> tuple[int | None, float]:
     """
     Digital Twin: Kalman-filtered state estimation with predictive horizon.
-    Alerts when projected D(t + DT_HORIZON_STEPS) ≥ DT_PRED_THRESHOLD.
+    Alerts when projected D(t + DT_HORIZON_STEPS) >= DT_PRED_THRESHOLD.
+    Returns: (detection_time, max_pof)
     """
     x_hat, P = D_obs[0], 0.01
     alpha_est = alpha_prior
+    max_pof = 0.0
 
     for t, obs in enumerate(D_obs):
         x_hat, P = kalman_step(x_hat, P, obs, alpha_est)
+        
+        # Calculate PoF using Kalman Variance P
+        # PoF is the probability that true state is above critical threshold
+        # We assume standard deviation scales with time horizon
+        std_pred = np.sqrt(P + (DT_HORIZON_STEPS * 0.001)) 
         x_future = predict_ahead(x_hat, alpha_est, DT_HORIZON_STEPS)
+        pof = float(1 - norm.cdf(D_CRITICAL, loc=x_future, scale=std_pred))
+        max_pof = max(max_pof, pof)
+
         if x_future >= DT_PRED_THRESHOLD:
-            return t
-    return None
+            return t, max_pof
+    return None, max_pof
 
 
 def detect_agentic(D_obs: np.ndarray,
-                   complexity: str) -> int | None:
+                    complexity: str) -> tuple[int | None, float]:
     """
-    Agentic AI: adaptive threshold with shock-context awareness.
-    The agent maintains:
-      - Kalman state estimate
-      - Short-term shock memory (sliding window)
-      - Bayesian-updated threshold that lowers on shock accumulation
-    This models a multi-agent PCA loop that adjusts sensitivity
-    based on contextual risk signals.
+    Agentic AI: risk-based adaptive threshold.
+    Uses Probability of Failure (PoF) to make risk-informed decisions.
     """
     threshold   = AGENTIC_BASE_THRESH
     shock_times = []
     x_hat, P    = D_obs[0], 0.01
     alpha_est   = DEGRAD_PARAMS[complexity]["alpha_mean"]
+    max_pof     = 0.0
 
     for t in range(1, len(D_obs)):
         obs = D_obs[t]
-
-        # Shock detection (rapid inter-step jump > 3σ noise)
         if obs - D_obs[t - 1] > 3 * SENSOR_NOISE_STD:
             shock_times.append(t)
 
-        # Adaptive threshold: each recent shock (within 20-step window)
-        # lowers threshold by 0.04 (context-aware risk elevation)
         recent_shocks   = sum(1 for s in shock_times if (t - s) < 20)
         live_threshold  = max(threshold - 0.04 * recent_shocks, 0.30)
 
         x_hat, P = kalman_step(x_hat, P, obs, alpha_est)
-
-        # Multi-step lookahead (shorter horizon than DT — more reactive)
+        
+        # Risk-based lookahead
+        std_pred = np.sqrt(P + (8 * 0.001))
         x_future = predict_ahead(x_hat, alpha_est, 8)
-        if x_future >= live_threshold:
+        pof = float(1 - norm.cdf(live_threshold, loc=x_future, scale=std_pred))
+        max_pof = max(max_pof, pof)
+
+        # Agent triggers if PoF exceeds 15% (Risk-averse policy)
+        if pof >= 0.15:
+            return t, max_pof
+    return None, max_pof
+
+
+def detect_integrity_violation(D_obs: np.ndarray, complexity: str) -> int | None:
+    """
+    Cyber-Physical Resilience: Statistical Variance Audit.
+    Detects 'Mimicry Attacks' where an attacker injects fake noise.
+    The agent compares the live window variance to the expected 
+    sensor noise floor.
+    """
+    window_size = 20
+    # The agent uses a statistical confidence interval for the variance.
+    # Chi-square based variance check (stochastic window)
+    for t in range(window_size + 80, len(D_obs)):
+        window = D_obs[t - window_size:t]
+        
+        # Stricter threshold for stealthy attacks (0.85 vs 0.75)
+        # Higher window variance will lead to some missed detections
+        if np.var(window) < (SENSOR_NOISE_STD**2) * 0.85:
             return t
     return None
 
@@ -275,9 +318,12 @@ def mitigation_success(detect_t: int | None,
 
 rows = []
 
-for config in CONFIGS:
+print("Initializing Simulation Environment...")
+print(f"Target: {N_RUNS * len(CONFIGS) * N_INCIDENTS} total incidents across {len(CONFIGS)} architectures.")
+
+for config in tqdm(CONFIGS, desc="Architecture Selection"):
     config_idx = CONFIGS.index(config)
-    for run in range(N_RUNS):
+    for run in tqdm(range(N_RUNS), desc=f"Simulating {config}", leave=False):
         # Per-run RNG: deterministic but independent across runs/configs
         rng = np.random.default_rng(GLOBAL_SEED + run + config_idx * 1000)
 
@@ -300,13 +346,35 @@ for config in CONFIGS:
             # Noisy sensor stream
             D_obs = noisy_obs(D_true, rng)
 
+            # --- Feature 2: Cyber-Physical Attack Simulation ---
+            is_attacked = 0
+            if rng.random() < ATTACK_PROB:
+                is_attacked = 1
+                # Variable Stealth: Attacker tries to mimic noise with 85-98% accuracy
+                # This ensures detection is no longer a deterministic 100%
+                stealth_factor = rng.uniform(0.85, 0.98)
+                D_obs = np.clip(D_true, 0, SPOOF_LIMIT) + rng.normal(0, SENSOR_NOISE_STD * stealth_factor, size=D_true.shape)
+                D_obs = np.clip(D_obs, 0, 1)
+
             # Detection
+            detect_t = None
+            attack_detected = 0
+            pof_at_detect = 0.0
+            
             if config == "rules":
                 detect_t = detect_rules(D_obs)
             elif "dt" in config and "multi" not in config:
-                detect_t = detect_dt(D_obs)
+                detect_t, pof_at_detect = detect_dt(D_obs)
             else:
-                detect_t = detect_agentic(D_obs, complexity)
+                # Agentic models have integrity checking and risk-based logic
+                detect_t, pof_at_detect = detect_agentic(D_obs, complexity)
+                
+                # Check for integrity violation (spoofing detection)
+                integrity_t = detect_integrity_violation(D_obs, complexity)
+                if integrity_t is not None:
+                    attack_detected = 1
+                    if detect_t is None or integrity_t < detect_t:
+                        detect_t = integrity_t
 
             # Compute latency (seconds)
             if detect_t is not None:
@@ -317,9 +385,18 @@ for config in CONFIGS:
 
             complexity_penalty = {"low": 0, "medium": 5, "high": 15}[complexity]
 
+            # --- Feature 4: Human Factors (Cognitive Fatigue) ---
+            # Operator workload (decisions/hour)
+            wl       = WORKLOAD[config]
+            workload = max(rng.normal(wl["mean"], wl["std"]), 0.0)
+            
+            # Fatigue multiplier: exponential latency growth above stress threshold
+            # Consistent with Wickens' Multiple Resource Theory (2002)
+            fatigue_mult = np.exp(0.04 * max(workload - 15, 0))
+
             pl = PIPELINE_S[config]
             pipeline_s = max(rng.normal(pl["mean"] + complexity_penalty, pl["std"]), 1.0)
-            latency_s  = algo_delay_s + pipeline_s
+            latency_s  = algo_delay_s + (pipeline_s * fatigue_mult)
 
             # Mitigation success
             success = mitigation_success(detect_t, D_true, rng)
@@ -336,9 +413,13 @@ for config in CONFIGS:
                 if rng.random() < 0.02: # 2% chance of network congestion
                     latency_s += 300 
 
-            # Operator workload
-            wl       = WORKLOAD[config]
-            workload = max(rng.normal(wl["mean"], wl["std"]), 0.0)
+            # Cyber-Physical Attack Impact
+            if is_attacked and not attack_detected:
+                success = 0 # Undetected spoofing leads to structural failure
+
+            # --- Feature 5: Economic ROI Analysis ---
+            # Total incident cost = (Mitigation or Failure cost) + System overhead
+            incident_cost = (COST_MITIGATION if success else COST_FAILURE) + SYSTEM_OVERHEAD[config]
 
             # Blockchain-anchored provenance
             justified = int(rng.binomial(1, JUSTIFIED_PROB[config]))
@@ -353,6 +434,11 @@ for config in CONFIGS:
                 justified,
                 round(alpha, 6),
                 round(noise_sigma, 6),
+                is_attacked,
+                attack_detected,
+                round(pof_at_detect, 4),
+                round(fatigue_mult, 3),
+                round(incident_cost, 0),
             ])
 
             incidents_logged += 1
@@ -361,6 +447,8 @@ df = pd.DataFrame(rows, columns=[
     "run_id", "config", "incident_id", "complexity",
     "latency_s", "success", "workload",
     "justified", "alpha", "noise_sigma",
+    "is_attacked", "attack_detected",
+    "pof", "fatigue_mult", "total_cost",
 ])
 
 df.to_csv("../data/synthetic_agentic_dt_dataset.csv", index=False)

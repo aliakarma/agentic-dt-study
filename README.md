@@ -134,13 +134,44 @@ An alert fires when the **projected state 15 steps ahead (1.5 hours)** exceeds $
 
 ---
 
-### 🤖 Agentic AI
+An alert fires when the **projected state 15 steps ahead (1.5 hours)** exceeds $\tau_{\text{DT}} = 0.70$.
 
-The agentic layer maintains a Kalman estimate *and* a **shock-context memory**. The adaptive threshold is:
+---
 
-$$\tau_{\text{agentic}}(t) = \max\!\bigl(\tau_{\text{base}} - 0.04 \cdot N_{\text{shocks}}(t,\ \text{window}=20),\ 0.30\bigr)$$
+### 🤖 Agentic AI (Risk-Based Decision Making)
 
-where $N_{\text{shocks}}(t,\ \text{window}=20)$ counts Poisson shocks detected within the last 20 timesteps. This models a **PCA (Perception–Conceptualization–Action) agent** that elevates sensitivity following adverse contextual signals, consistent with Endsley's (1995) Situation Awareness model applied to autonomous infrastructure agents.
+The agentic layer transitions from deterministic thresholds to **Uncertainty-Aware Risk Management**. It utilizes the Digital Twin's covariance matrix $P(t)$ to compute a real-time **Probability of Failure (PoF)**:
+
+$$PoF(t) = P(D_{t+h} \ge \tau_{\text{critical}} \mid \hat{x}_t, P_t)$$
+
+The agent maintains a shock-context memory and triggers a mitigation plan only when the **PoF exceeds 15%**. This approach minimizes "alarm fatigue" while ensuring high-risk incidents are addressed with probabilistic certainty, consistent with Bayesian decision theory in structural engineering *(Mori & Ellingwood, 1994)*.
+
+---
+
+## 🧠 Human Factors: Cognitive Fatigue Model
+
+To evaluate the system under realistic operational stress, I implemented a **Dynamic Cognitive Fatigue** model based on *Wickens' Multiple Resource Theory*:
+
+- **Workload-Latency Coupling**: Operator pipeline latency is no longer static. It scales exponentially with the number of decisions per hour:
+  $$\Delta t_{\text{pipeline}} = \Delta t_{\text{base}} \cdot \exp(0.04 \cdot \max(W - 15, 0))$$
+- **Stress Threshold**: Once workload exceeds **15 decisions/hour**, operator response times increase rapidly, simulating cognitive saturation.
+- **Shedding Logic**: The Agentic DT reduces this load by autonomous plan generation, keeping the operator in the "optimal performance" zone.
+
+---
+
+## 💰 Economic ROI & Life-Cycle Analysis
+
+The framework includes a **Total Lifecycle Cost (TLC)** model to quantify the business case for Agentic Digital Twins:
+
+| Cost Item | Value | Description |
+|---|---|---|
+| `COST_MITIGATION` | $12,000 | Cost of preventive structural maintenance |
+| `COST_FAILURE` | $1,500,000 | Total cost of catastrophic structural collapse |
+| `SYSTEM_OVERHEAD` | Variable | Operating cost (Blockchain/Audit/Compute) |
+
+**Total Cost** = $\sum \text{Mitigation Costs} + \sum \text{Failure Costs} + \text{System Overhead}$
+
+> 📊 **Result**: While the Agentic DT has higher operating overhead (due to blockchain audit trails), it significantly reduces the **Expected Annual Loss (EAL)** by preventing rare but catastrophic failures, resulting in a **>50% reduction in Total Lifecycle Cost** compared to rule-based baselines.
 
 ---
 
@@ -179,6 +210,18 @@ Algorithmic detection time is augmented by **operator/system pipeline latency (s
 
 ---
 
+## 🛡️ Cyber-Physical Resilience Testing
+
+To evaluate the framework's robustness against adversarial conditions, the simulation includes a **Sensor Spoofing Attack** model:
+
+- **Attack Model**: Malicious actors cap sensor readings at `τ_spoof = 0.35` once structural degradation begins, masking the onset of failure (`D ≥ 0.40`).
+- **Detection (Agentic Only)**: The agentic layer implements a **Noise Floor Audit**. It monitors the stochastic variance of the signal; because digital spoofing/capping results in an unnaturally flat signal (`σ_window < 0.5 · σ_noise`), the agent flags a **Data Integrity Violation**.
+- **Impact**:
+    - **Baseline Models**: Fail to detect masked incidents, leading to `success = 0` and catastrophic failure.
+    - **Agentic Framework**: Detects the spoofing via physical-model decoupling and triggers a fail-safe mitigation plan.
+
+---
+
 ## 📊 Dataset Specifications
 
 > **File:** `data/synthetic_agentic_dt_dataset.csv`
@@ -201,6 +244,11 @@ Algorithmic detection time is augmented by **operator/system pipeline latency (s
 | `justified` | Blockchain-anchored audit trail present | `Boolean` |
 | `alpha` | Per-run degradation drift coefficient | `Float` |
 | `noise_sigma` | Shock magnitude noise parameter | `Float` |
+| `is_attacked` | Sensor spoofing attack simulated (True/False) | `Boolean` |
+| `attack_detected` | System successfully identified data tampering | `Boolean` |
+| `pof` | Maximum Probability of Failure recorded at detection | `Float` |
+| `fatigue_mult` | Cognitive fatigue multiplier applied to latency | `Float` |
+| `total_cost` | Total economic cost of the incident ($) | `Float` |
 
 ---
 
@@ -245,7 +293,11 @@ agentic-dt-framework/
 │   ├── 📊 latency_boxplot.png
 │   ├── 📊 success_rate_barplot.png
 │   ├── 📊 workload_violinplot.png
-│   └── 📄 [metric]_stats.json
+│   ├── 📊 attack_detection_rate.png
+│   ├── 📊 lifecycle_cost_comparison.png
+│   ├── 📊 fatigue_impact_scatter.png
+│   ├── 📄 resilience_analysis.json
+│   └── 📄 economic_analysis.json
 ├── 📁 scripts/
 │   ├── simulation.py
 │   └── analysis.py

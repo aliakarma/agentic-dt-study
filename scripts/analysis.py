@@ -204,8 +204,8 @@ mdf = md.fit()
 print(mdf.summary())
 
 sep("Multivariate Logistic Regression for Success")
-# Add alpha and noise_sigma as covariates
-log_reg = smf.logit("success ~ C(config) + C(complexity) + alpha + noise_sigma", data=df).fit()
+# Add alpha as covariate (removed noise_sigma due to perfect collinearity with complexity)
+log_reg = smf.logit("success ~ C(config) + C(complexity) + alpha", data=df).fit()
 print(log_reg.summary())
 
 
@@ -288,9 +288,74 @@ print(table1)
 table1.reset_index().to_json(os.path.join(RESULTS_DIR, "run_level_means.json"), orient="records", indent=2)
 
 # ############################################################
-# 11. Visualizations
+# 11. Resilience Analysis (Cyber-Physical Attack)
 # ############################################################
-sep("11. GENERATING PLOTS")
+sep("11. CYBER-PHYSICAL RESILIENCE ANALYSIS")
+
+# Filter attacked incidents
+attack_df = df[df["is_attacked"] == 1]
+
+resilience_results = []
+for config in CONFIGS:
+    sub = attack_df[attack_df["config"] == config]
+    detection_rate = sub["attack_detected"].mean()
+    success_rate   = sub["success"].mean()
+    resilience_results.append({
+        "config": config,
+        "attack_detection_rate": round(float(detection_rate), 4),
+        "success_rate_under_attack": round(float(success_rate), 4),
+        "n_attacks": int(len(sub))
+    })
+
+df_resilience = pd.DataFrame(resilience_results)
+print(df_resilience.to_string(index=False))
+df_resilience.to_json(os.path.join(RESULTS_DIR, "resilience_analysis.json"), orient="records", indent=2)
+
+# Attack Detection Plot
+plt.figure(figsize=(10, 6))
+sns.barplot(x="config", y="attack_detection_rate", data=df_resilience)
+plt.title("Sensor Spoofing Attack Detection Rate")
+plt.ylabel("Detection Probability")
+plt.ylim(0, 1.0)
+plt.savefig(os.path.join(RESULTS_DIR, "attack_detection_rate.png"), dpi=300, bbox_inches="tight")
+plt.close()
+
+# ############################################################
+# 12. Economic ROI & Life-Cycle Analysis
+# ############################################################
+sep("12. ECONOMIC ROI & LIFE-CYCLE ANALYSIS")
+
+economic_summary = df.groupby("config")["total_cost"].agg(["sum", "mean", "std"]).round(2)
+economic_summary.columns = ["Total_Lifecycle_Cost", "Mean_Incident_Cost", "Std_Cost"]
+print(economic_summary)
+economic_summary.reset_index().to_json(os.path.join(RESULTS_DIR, "economic_analysis.json"), orient="records", indent=2)
+
+# Lifecycle Cost Plot
+plt.figure(figsize=(12, 6))
+sns.barplot(x=economic_summary.index, y="Total_Lifecycle_Cost", data=economic_summary)
+plt.title("Total Lifecycle Cost by Architecture (N=18,000)")
+plt.ylabel("Total Cost ($)")
+plt.savefig(os.path.join(RESULTS_DIR, "lifecycle_cost_comparison.png"), dpi=300, bbox_inches="tight")
+plt.close()
+
+# ############################################################
+# 13. Human Factors & Cognitive Fatigue Analysis
+# ############################################################
+sep("13. HUMAN FACTORS: COGNITIVE FATIGUE IMPACT")
+
+# Correlation between fatigue multiplier and final latency
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x="workload", y="latency_s", hue="config", data=df, alpha=0.3)
+plt.title("Impact of Cognitive Workload on Pipeline Latency")
+plt.ylabel("Total Latency (s)")
+plt.xlabel("Workload (Decisions/Hour)")
+plt.savefig(os.path.join(RESULTS_DIR, "fatigue_impact_scatter.png"), dpi=300, bbox_inches="tight")
+plt.close()
+
+# ############################################################
+# 14. Visualizations
+# ############################################################
+sep("14. GENERATING PLOTS")
 
 # Latency Boxplot
 plt.figure(figsize=(12, 7))

@@ -1,23 +1,23 @@
 [
   {
     "comparison":"agentic_full vs dt_multi_no_chain",
-    "t":-0.2807760991,
-    "p_raw":0.7788902066,
-    "cohens_d":-0.0066179561,
+    "t":-0.2639374884,
+    "p_raw":0.7918356439,
+    "cohens_d":-0.0062210663,
     "p_bonferroni":1.0
   },
   {
     "comparison":"agentic_full vs dt",
-    "t":-23.0767862555,
-    "p_raw":1.682279165e-113,
-    "cohens_d":-0.5439250683,
-    "p_bonferroni":5.046837496e-113
+    "t":-43.1097000767,
+    "p_raw":0.0,
+    "cohens_d":-1.0161053753,
+    "p_bonferroni":0.0
   },
   {
     "comparison":"dt vs rules",
-    "t":-6.6654589565,
-    "p_raw":0.0,
-    "cohens_d":-0.1571063743,
-    "p_bonferroni":0.0000000001
+    "t":-1.9850468184,
+    "p_raw":0.0471771594,
+    "cohens_d":-0.0467880022,
+    "p_bonferroni":0.1415314783
   }
 ]
