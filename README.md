@@ -38,6 +38,10 @@
     — Manuscript under review in PLOS ONE.
   </blockquote>
 
+  <p align="center">
+    <b>Note:</b> This repository contains a Monte Carlo simulation framework designed to characterize the theoretical performance bounds of an Agentic Digital Twin architecture. It is a conceptual prototype, and metrics generated are synthetic representations based on parameterized distributions.
+  </p>
+
 </div>
 
 ---
@@ -68,13 +72,15 @@ This repository provides a **fully reproducible simulation framework** and synth
 
 ---
 
-## ⚙️ Three Configurations Evaluated
+## ⚙️ Experimental Configurations (Ablation Study)
 
-| ID | Configuration | Detection Mechanism |
-|:---:|---|---|
-| `rules` | **Rule-Based Threshold Monitoring** | Static threshold crossing on noisy sensor stream |
-| `dt` | **Digital Twin (DT-Only)** | Kalman-filtered state estimation with predictive horizon alert |
-| `agentic` | **DT + Agentic AI Orchestration** | Adaptive Bayesian threshold with shock-context adjustment and multi-step lookahead |
+| ID | Configuration | Detection Mechanism | Orchestration |
+|:---:|---|---|---|
+| `rules` | **Baseline (Static)** | Static threshold crossing | Manual/Rules |
+| `dt` | **DT Baseline** | Kalman Filter (Predictive) | Automated Alert |
+| `dt_single_agent` | **Ablation 1** | Kalman Filter (Predictive) | Single-Agent Dispatch |
+| `dt_multi_no_chain` | **Ablation 2** | Multi-Agent Adaptive Loop | No Blockchain Audit |
+| `agentic_full` | **Proposed Model** | Multi-Agent Adaptive Loop | Blockchain-Anchored Audit |
 
 ---
 
@@ -165,7 +171,9 @@ Algorithmic detection time is augmented by **operator/system pipeline latency (s
 |:---:|:---:|:---:|---|
 | `rules` | 42 | 8 | Sensor alert → manual dashboard review → phone dispatch |
 | `dt` | 18 | 4 | Automated alert → operator screen confirmation → dispatch |
-| `agentic` | 6 | 2 | Autonomous plan generation → push notification → dispatch |
+| `dt_single_agent` | 18 | 4 | Single-agent predictive alert → dispatch |
+| `dt_multi_no_chain` | 6 | 2 | Multi-agent plan → push notification → dispatch |
+| `agentic_full` | 6 | 2 | Autonomous multi-agent plan → push notification → dispatch |
 
 > **Total latency** = algorithmic detection delay + pipeline latency.
 
@@ -176,7 +184,7 @@ Algorithmic detection time is augmented by **operator/system pipeline latency (s
 > **File:** `data/synthetic_agentic_dt_dataset.csv`
 
 ```
-3 configurations × 30 runs × 120 incidents = 10,800 incident records
+5 configurations × 30 runs × 120 incidents = 18,000 incident records
 ```
 
 ### Data Dictionary
@@ -250,11 +258,11 @@ pip install -r requirements.txt
 cd scripts
 python simulation.py
 
-# Run full statistical analysis
+# Run full statistical analysis (including Mixed-Effects Modeling and Logistic Regression)
 python analysis.py
 ```
 
-> ✅ The regenerated dataset is **guaranteed to exactly match** the archived version (seed=42).
+> ✅ The regenerated dataset is **guaranteed to exactly match** the archived version (seed=42). To run specific ablation studies, modify the `CONFIGS` list in `simulation.py`.
 
 ---
 
