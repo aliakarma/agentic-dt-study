@@ -8,7 +8,17 @@ import statsmodels.formula.api as smf
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 from statsmodels.stats.multitest import multipletests
 import warnings
+import os
+import json
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 warnings.filterwarnings("ignore")
+
+# Configure output directory
+RESULTS_DIR = "../results"
+os.makedirs(RESULTS_DIR, exist_ok=True)
+sns.set_theme(style="whitegrid", palette="muted")
 
 # ------------------------------------------------------------
 # Load dataset
@@ -69,7 +79,9 @@ for metric in ["latency_s", "success", "workload"]:
                 "ci_95_half":  ci_95(sub),
                 "median":      sub.median(),
             })
-    print(pd.DataFrame(rows).round(3).to_string(index=False))
+    df_desc = pd.DataFrame(rows)
+    print(df_desc.round(3).to_string(index=False))
+    df_desc.to_json(os.path.join(RESULTS_DIR, f"desc_stats_{metric}.json"), orient="records", indent=2)
 
 # Overall by config
 sep("  Overall means by config")
@@ -114,6 +126,7 @@ for i, r in enumerate(results_t):
     r["p_bonferroni"] = p_corr[i]
 
 print(pd.DataFrame(results_t).round(4).to_string(index=False))
+pd.DataFrame(results_t).to_json(os.path.join(RESULTS_DIR, "t_tests_latency.json"), orient="records", indent=2)
 
 
 # ############################################################
@@ -165,6 +178,7 @@ for i, r in enumerate(chi_results):
     r["p_bonferroni"] = p_chi_corr[i]
 
 print(pd.DataFrame(chi_results).round(4).to_string(index=False))
+pd.DataFrame(chi_results).to_json(os.path.join(RESULTS_DIR, "chi_squared_success.json"), orient="records", indent=2)
 
 
 # ############################################################
@@ -271,4 +285,39 @@ for col_mean, col_sd in [("latency_mean","latency_sd"),
     ).round(3)
 
 print(table1)
+table1.reset_index().to_json(os.path.join(RESULTS_DIR, "run_level_means.json"), orient="records", indent=2)
+
+# ############################################################
+# 11. Visualizations
+# ############################################################
+sep("11. GENERATING PLOTS")
+
+# Latency Boxplot
+plt.figure(figsize=(12, 7))
+sns.boxplot(x="config", y="latency_s", hue="complexity", data=df)
+plt.title("Total Latency by Configuration and Complexity")
+plt.ylabel("Latency (seconds)")
+plt.xlabel("Architecture Configuration")
+plt.savefig(os.path.join(RESULTS_DIR, "latency_boxplot.png"), dpi=300, bbox_inches="tight")
+plt.close()
+
+# Success Rate Bar Plot
+plt.figure(figsize=(10, 6))
+success_rates = df.groupby("config")["success"].mean().reset_index()
+sns.barplot(x="config", y="success", data=success_rates)
+plt.title("Mitigation Success Rate by Configuration")
+plt.ylabel("Success Probability")
+plt.ylim(0, 1.0)
+plt.savefig(os.path.join(RESULTS_DIR, "success_rate_barplot.png"), dpi=300, bbox_inches="tight")
+plt.close()
+
+# Workload Violin Plot
+plt.figure(figsize=(10, 6))
+sns.violinplot(x="config", y="workload", data=df)
+plt.title("Operator Workload Distribution")
+plt.ylabel("Decisions / Hour")
+plt.savefig(os.path.join(RESULTS_DIR, "workload_violinplot.png"), dpi=300, bbox_inches="tight")
+plt.close()
+
+print(f"All plots and JSON results saved to: {os.path.abspath(RESULTS_DIR)}")
 print("\nAll analysis complete.")
