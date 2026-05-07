@@ -4,28 +4,29 @@ from scipy import stats
 from scipy.stats import shapiro, mannwhitneyu, chi2_contingency
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
+import statsmodels.formula.api as smf
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 from statsmodels.stats.multitest import multipletests
 import warnings
 warnings.filterwarnings("ignore")
 
-# ─────────────────────────────────────────────────────────────
+# ------------------------------------------------------------
 # Load dataset
-# ─────────────────────────────────────────────────────────────
+# ------------------------------------------------------------
 df = pd.read_csv("../data/synthetic_agentic_dt_dataset.csv")
-df["config"]     = pd.Categorical(df["config"],     categories=["rules", "dt", "agentic"], ordered=False)
+df["config"]     = pd.Categorical(df["config"],     categories=["rules", "dt", "dt_single_agent", "dt_multi_no_chain", "agentic_full"], ordered=False)
 df["complexity"] = pd.Categorical(df["complexity"], categories=["low", "medium", "high"],   ordered=True)
 
-CONFIGS      = ["rules", "dt", "agentic"]
+CONFIGS      = ["rules", "dt", "dt_single_agent", "dt_multi_no_chain", "agentic_full"]
 COMPLEXITIES = ["low", "medium", "high"]
-N_PER_CONFIG = len(df) // 3
+N_PER_CONFIG = len(df) // len(CONFIGS)
 
 
 def sep(title=""):
-    print("\n" + "═" * 60)
+    print("\n" + "=" * 60)
     if title:
         print(f"  {title}")
-        print("─" * 60)
+        print("-" * 60)
 
 
 def cohens_d(a: pd.Series, b: pd.Series) -> float:
@@ -48,9 +49,9 @@ def ci_95(series: pd.Series) -> float:
     return t * se
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 1. Descriptive Statistics
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 sep("1. DESCRIPTIVE STATISTICS")
 
 for metric in ["latency_s", "success", "workload"]:
@@ -77,25 +78,25 @@ print(df.groupby("config")[["latency_s", "success", "workload"]].agg(
 ).round(3))
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 2. Normality Screening (Shapiro-Wilk, sampled)
-# ═══════════════════════════════════════════════════════════════
-sep("2. NORMALITY SCREENING (Shapiro-Wilk, n≤5000 subsample)")
+# ############################################################
+sep("2. NORMALITY SCREENING (Shapiro-Wilk, n<=5000 subsample)")
 for metric in ["latency_s", "workload"]:
     print(f"\n  [{metric}]")
     for config in CONFIGS:
         sub  = df[df["config"] == config][metric]
         samp = sub.sample(min(len(sub), 5000), random_state=42)
         stat, p = shapiro(samp)
-        note = "  ← non-normal" if p < 0.05 else ""
+        note = "  <- non-normal" if p < 0.05 else ""
         print(f"    {config:8s}  W={stat:.4f}  p={p:.4f}{note}")
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 3. Welch's t-Tests (Latency)
-# ═══════════════════════════════════════════════════════════════
-sep("3. WELCH'S t-TESTS — LATENCY")
-pairs = [("agentic", "dt"), ("agentic", "rules"), ("dt", "rules")]
+# ############################################################
+sep("3. WELCH'S t-TESTS -- LATENCY")
+pairs = [("agentic_full", "dt_multi_no_chain"), ("agentic_full", "dt"), ("dt", "rules")]
 raw_p = []
 results_t = []
 
@@ -115,10 +116,10 @@ for i, r in enumerate(results_t):
 print(pd.DataFrame(results_t).round(4).to_string(index=False))
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 4. Mann-Whitney U Tests (non-parametric complement)
-# ═══════════════════════════════════════════════════════════════
-sep("4. MANN-WHITNEY U TESTS — LATENCY (non-parametric)")
+# ############################################################
+sep("4. MANN-WHITNEY U TESTS -- LATENCY (non-parametric)")
 mw_raw_p = []
 mw_results = []
 
@@ -137,10 +138,10 @@ for i, r in enumerate(mw_results):
 print(pd.DataFrame(mw_results).round(4).to_string(index=False))
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 5. Chi-Squared Tests — Mitigation Success Rate
-# ═══════════════════════════════════════════════════════════════
-sep("5. CHI-SQUARED TESTS — MITIGATION SUCCESS RATE")
+# ############################################################
+sep("5. CHI-SQUARED TESTS -- MITIGATION SUCCESS RATE")
 print("\n  Success rates by config:")
 print(df.groupby("config")["success"].agg(["mean", "sum", "count"]).round(3))
 
@@ -166,9 +167,9 @@ for i, r in enumerate(chi_results):
 print(pd.DataFrame(chi_results).round(4).to_string(index=False))
 
 
-# ═══════════════════════════════════════════════════════════════
-# 6. Two-Way ANOVA — Configuration × Complexity
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
+# 6. Two-Way ANOVA -- Configuration x Complexity
+# ############################################################
 sep("6. TWO-WAY ANOVA (Type II SS)")
 for metric in ["latency_s", "success"]:
     print(f"\n  Outcome: {metric}")
@@ -181,22 +182,34 @@ for metric in ["latency_s", "success"]:
 
     print(anova[["sum_sq", "df", "F", "PR(>F)", "eta_sq_partial"]].round(4))
 
+sep("6b. MIXED-EFFECTS MODELING (Accounting for Run-Level Nesting)")
+# Random intercept for run_id
+# We use a simpler formula for LMM to ensure convergence
+md = smf.mixedlm("latency_s ~ C(config) + C(complexity)", df, groups=df["run_id"])
+mdf = md.fit()
+print(mdf.summary())
 
-# ═══════════════════════════════════════════════════════════════
-# 7. Post-hoc Tukey HSD — Latency by Config
-# ═══════════════════════════════════════════════════════════════
-sep("7. POST-HOC TUKEY HSD — LATENCY BY CONFIGURATION")
+sep("Multivariate Logistic Regression for Success")
+# Add alpha and noise_sigma as covariates
+log_reg = smf.logit("success ~ C(config) + C(complexity) + alpha + noise_sigma", data=df).fit()
+print(log_reg.summary())
+
+
+# ############################################################
+# 7. Post-hoc Tukey HSD -- Latency by Config
+# ############################################################
+sep("7. POST-HOC TUKEY HSD -- LATENCY BY CONFIGURATION")
 tukey = pairwise_tukeyhsd(endog=df["latency_s"], groups=df["config"], alpha=0.05)
 print(tukey.summary())
 
-sep("   POST-HOC TUKEY HSD — LATENCY BY COMPLEXITY")
+sep("   POST-HOC TUKEY HSD -- LATENCY BY COMPLEXITY")
 tukey_cx = pairwise_tukeyhsd(endog=df["latency_s"], groups=df["complexity"], alpha=0.05)
 print(tukey_cx.summary())
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 8. Workload and Justification Summary
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 sep("8. WORKLOAD AND PROVENANCE JUSTIFICATION")
 print("\n  Workload (decisions/hour):")
 print(df.groupby("config")["workload"].agg(["mean", "std", "median"]).round(3))
@@ -205,33 +218,33 @@ print("\n  Blockchain-justified proportion:")
 print(df.groupby("config")["justified"].agg(["mean", "sum", "count"]).round(3))
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 9. Sensitivity Analysis — Degradation Parameters
-# ═══════════════════════════════════════════════════════════════
-sep("9. SENSITIVITY ANALYSIS — Degradation Parameters")
+# ############################################################
+sep("9. SENSITIVITY ANALYSIS -- Degradation Parameters")
 
 # Spearman correlation of alpha and noise_sigma with latency/success
-print("\n  Spearman ρ with latency_s:")
+print("\n  Spearman rho with latency_s:")
 for config in CONFIGS:
     sub = df[df["config"] == config]
     ra, pa = stats.spearmanr(sub["alpha"],       sub["latency_s"])
     rn, pn = stats.spearmanr(sub["noise_sigma"], sub["latency_s"])
-    print(f"    {config:8s}  α→latency: ρ={ra:.3f} (p={pa:.3f})  "
-          f"σ→latency: ρ={rn:.3f} (p={pn:.3f})")
+    print(f"    {config:8s}  alpha->latency: rho={ra:.3f} (p={pa:.3f})  "
+          f"sigma->latency: rho={rn:.3f} (p={pn:.3f})")
 
-print("\n  Spearman ρ with success:")
+print("\n  Spearman rho with success:")
 for config in CONFIGS:
     sub = df[df["config"] == config]
     ra, pa = stats.spearmanr(sub["alpha"],       sub["success"])
     rn, pn = stats.spearmanr(sub["noise_sigma"], sub["success"])
-    print(f"    {config:8s}  α→success: ρ={ra:.3f} (p={pa:.3f})  "
-          f"σ→success: ρ={rn:.3f} (p={pn:.3f})")
+    print(f"    {config:8s}  alpha->success: rho={ra:.3f} (p={pa:.3f})  "
+          f"sigma->success: rho={rn:.3f} (p={pn:.3f})")
 
 
-# ═══════════════════════════════════════════════════════════════
+# ############################################################
 # 10. Run-level aggregated statistics (for paper Table 1)
-# ═══════════════════════════════════════════════════════════════
-sep("10. RUN-LEVEL MEANS (Table 1 — in Manuscript)")
+# ############################################################
+sep("10. RUN-LEVEL MEANS (Table 1 -- in Manuscript)")
 
 run_means = (
     df.groupby(["config", "run_id"])[["latency_s", "success", "workload", "justified"]]
