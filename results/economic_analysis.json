@@ -25,8 +25,8 @@
   },
   {
     "config":"agentic_full",
-    "Total_Lifecycle_Cost":1364688000,
-    "Mean_Incident_Cost":379080.0,
-    "Std_Cost":638581.54
+    "Total_Lifecycle_Cost":1366176000,
+    "Mean_Incident_Cost":379493.33,
+    "Std_Cost":638828.64
   }
 ]

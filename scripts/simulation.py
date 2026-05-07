@@ -264,25 +264,35 @@ def detect_agentic(D_obs: np.ndarray,
     return None, max_pof
 
 
-def detect_integrity_violation(D_obs: np.ndarray, complexity: str) -> int | None:
+def detect_integrity_violation(D_obs: np.ndarray, complexity: str,
+                               audit_level: str = "basic") -> int | None:
     """
     Cyber-Physical Resilience: Statistical Variance Audit.
     Detects 'Mimicry Attacks' where an attacker injects fake noise.
-    The agent compares the live window variance to the expected 
-    sensor noise floor.
+
+    audit_level:
+        'basic'    — dt_multi_no_chain: periodic audit every 50 steps,
+                     window=12, threshold=0.85 of expected variance.
+        'enhanced' — agentic_full: dual-pass audit. Primary periodic check
+                     PLUS a secondary fine-grained sweep (every 20 steps,
+                     window=20, threshold=0.90). Reflects the additional
+                     compute budget of blockchain-anchored verification.
     """
+    # --- Pass 1: Periodic coarse audit (both levels) ---
     window_size = 12
-    # The agent uses a statistical confidence interval for the variance.
-    # Chi-square based variance check (stochastic window)
-    # Periodic Auditing: The agent only audits the noise floor 
-    # every 50 steps to simulate discrete blockchain-anchored checks.
     for t in range(window_size + 80, len(D_obs), 50):
         window = D_obs[t - window_size:t]
-        
-        # Realistic Statistical Threshold (0.85)
-        # Small window size (12) creates significant sampling noise
         if np.var(window) < (SENSOR_NOISE_STD**2) * 0.85:
             return t
+
+    # --- Pass 2: Fine-grained sweep (agentic_full only) ---
+    if audit_level == "enhanced":
+        window_lg = 20
+        for t in range(window_lg + 80, len(D_obs), 20):
+            window = D_obs[t - window_lg:t]
+            if np.var(window) < (SENSOR_NOISE_STD**2) * 0.90:
+                return t
+
     return None
 
 
@@ -371,12 +381,21 @@ for config in tqdm(CONFIGS, desc="Architecture Selection"):
                 # Agentic models have integrity checking and risk-based logic
                 detect_t, pof_at_detect = detect_agentic(D_obs, complexity)
                 
-                # Check for integrity violation (spoofing detection)
-                integrity_t = detect_integrity_violation(D_obs, complexity)
+                # Determine audit level based on architecture
+                audit_lvl = "enhanced" if config == "agentic_full" else "basic"
+                integrity_t = detect_integrity_violation(D_obs, complexity,
+                                                        audit_level=audit_lvl)
                 if integrity_t is not None:
                     attack_detected = 1
                     if detect_t is None or integrity_t < detect_t:
                         detect_t = integrity_t
+            
+            # Feature Extraction for ML training (Realistic Sensing Audit)
+            # We log the minimum window variance across the incident.
+            # A 'capping' attack will naturally produce a low-variance period.
+            window_size = 12
+            vars_found = [np.var(D_obs[t-window_size:t]) for t in range(window_size, len(D_obs), 10)]
+            window_var_feature = min(vars_found) if vars_found else (SENSOR_NOISE_STD**2)
 
             # Compute latency (seconds)
             if detect_t is not None:
@@ -441,6 +460,7 @@ for config in tqdm(CONFIGS, desc="Architecture Selection"):
                 round(pof_at_detect, 4),
                 round(fatigue_mult, 3),
                 round(incident_cost, 0),
+                round(window_var_feature, 8)
             ])
 
             incidents_logged += 1
@@ -451,6 +471,7 @@ df = pd.DataFrame(rows, columns=[
     "justified", "alpha", "noise_sigma",
     "is_attacked", "attack_detected",
     "pof", "fatigue_mult", "total_cost",
+    "window_var_feature"
 ])
 
 df.to_csv("../data/synthetic_agentic_dt_dataset.csv", index=False)

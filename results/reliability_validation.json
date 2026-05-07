@@ -1,0 +1,6 @@
+{
+  "train_mean_success": 0.5944,
+  "test_mean_success": 0.6047,
+  "consistency_delta": 0.0103,
+  "classifier_accuracy": 0.7592
+}

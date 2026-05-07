@@ -53,15 +53,15 @@
   },
   {
     "config":"agentic_full",
-    "latency_mean":3268.821,
-    "latency_sd":1090.783,
-    "success_mean":0.757,
-    "success_sd":0.049,
+    "latency_mean":3197.217,
+    "latency_sd":1029.545,
+    "success_mean":0.756,
+    "success_sd":0.048,
     "workload_mean":9.014,
     "workload_sd":0.128,
     "justified_mean":0.917,
-    "latency_ci95":390.332,
-    "success_ci95":0.018,
+    "latency_ci95":368.418,
+    "success_ci95":0.017,
     "workload_ci95":0.046
   }
 ]
