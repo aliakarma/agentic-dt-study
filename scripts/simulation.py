@@ -274,12 +274,15 @@ def detect_integrity_violation(D_obs: np.ndarray, complexity: str) -> int | None
     window_size = 20
     # The agent uses a statistical confidence interval for the variance.
     # Chi-square based variance check (stochastic window)
-    for t in range(window_size + 80, len(D_obs)):
+    # Periodic Auditing: The agent only audits the noise floor 
+    # every 50 steps to simulate discrete blockchain-anchored checks.
+    for t in range(window_size + 80, len(D_obs), 50):
         window = D_obs[t - window_size:t]
         
-        # Stricter threshold for stealthy attacks (0.85 vs 0.75)
-        # Higher window variance will lead to some missed detections
-        if np.var(window) < (SENSOR_NOISE_STD**2) * 0.85:
+        # Realistic Statistical Threshold (0.80)
+        # Stochastic window variance will naturally cross this 
+        # threshold non-deterministically.
+        if np.var(window) < (SENSOR_NOISE_STD**2) * 0.80:
             return t
     return None
 
@@ -350,9 +353,9 @@ for config in tqdm(CONFIGS, desc="Architecture Selection"):
             is_attacked = 0
             if rng.random() < ATTACK_PROB:
                 is_attacked = 1
-                # Variable Stealth: Attacker tries to mimic noise with 85-98% accuracy
-                # This ensures detection is no longer a deterministic 100%
-                stealth_factor = rng.uniform(0.85, 0.98)
+                # Extreme Stealth: Attacker mimics noise with 92-105% accuracy.
+                # Sometimes they even 'over-noise' to mask the cap.
+                stealth_factor = rng.uniform(0.92, 1.05)
                 D_obs = np.clip(D_true, 0, SPOOF_LIMIT) + rng.normal(0, SENSOR_NOISE_STD * stealth_factor, size=D_true.shape)
                 D_obs = np.clip(D_obs, 0, 1)
 
