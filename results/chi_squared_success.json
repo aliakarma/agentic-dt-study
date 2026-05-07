@@ -1,0 +1,23 @@
+[
+  {
+    "comparison":"agentic_full vs dt_multi_no_chain",
+    "chi2":0.1465320742,
+    "df":1,
+    "p_raw":0.7018717088,
+    "p_bonferroni":1.0
+  },
+  {
+    "comparison":"agentic_full vs dt",
+    "chi2":129.2492766157,
+    "df":1,
+    "p_raw":5.981425512e-30,
+    "p_bonferroni":1.794427654e-29
+  },
+  {
+    "comparison":"dt vs rules",
+    "chi2":16.7343218823,
+    "df":1,
+    "p_raw":0.0000429961,
+    "p_bonferroni":0.0001289883
+  }
+]
