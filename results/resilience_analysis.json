@@ -19,14 +19,14 @@
   },
   {
     "config":"dt_multi_no_chain",
-    "attack_detection_rate":1.0,
-    "success_rate_under_attack":0.5333,
+    "attack_detection_rate":0.9972,
+    "success_rate_under_attack":0.4972,
     "n_attacks":360
   },
   {
     "config":"agentic_full",
-    "attack_detection_rate":1.0,
-    "success_rate_under_attack":0.6114,
+    "attack_detection_rate":0.9946,
+    "success_rate_under_attack":0.5516,
     "n_attacks":368
   }
 ]

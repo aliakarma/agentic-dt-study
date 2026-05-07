@@ -271,7 +271,7 @@ def detect_integrity_violation(D_obs: np.ndarray, complexity: str) -> int | None
     The agent compares the live window variance to the expected 
     sensor noise floor.
     """
-    window_size = 20
+    window_size = 12
     # The agent uses a statistical confidence interval for the variance.
     # Chi-square based variance check (stochastic window)
     # Periodic Auditing: The agent only audits the noise floor 
@@ -279,10 +279,9 @@ def detect_integrity_violation(D_obs: np.ndarray, complexity: str) -> int | None
     for t in range(window_size + 80, len(D_obs), 50):
         window = D_obs[t - window_size:t]
         
-        # Realistic Statistical Threshold (0.80)
-        # Stochastic window variance will naturally cross this 
-        # threshold non-deterministically.
-        if np.var(window) < (SENSOR_NOISE_STD**2) * 0.80:
+        # Realistic Statistical Threshold (0.85)
+        # Small window size (12) creates significant sampling noise
+        if np.var(window) < (SENSOR_NOISE_STD**2) * 0.85:
             return t
     return None
 
@@ -353,9 +352,9 @@ for config in tqdm(CONFIGS, desc="Architecture Selection"):
             is_attacked = 0
             if rng.random() < ATTACK_PROB:
                 is_attacked = 1
-                # Extreme Stealth: Attacker mimics noise with 92-105% accuracy.
-                # Sometimes they even 'over-noise' to mask the cap.
-                stealth_factor = rng.uniform(0.92, 1.05)
+                # Imperceptible Stealth: Attacker mimics noise with 96-104% accuracy.
+                # This makes detection statistically challenging even for the audit agent.
+                stealth_factor = rng.uniform(0.96, 1.04)
                 D_obs = np.clip(D_true, 0, SPOOF_LIMIT) + rng.normal(0, SENSOR_NOISE_STD * stealth_factor, size=D_true.shape)
                 D_obs = np.clip(D_obs, 0, 1)
 

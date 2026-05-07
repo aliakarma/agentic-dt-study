@@ -20,6 +20,14 @@ RESULTS_DIR = "../results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 sns.set_theme(style="whitegrid", palette="muted")
 
+def add_labels(ax, fmt=".2f"):
+    """Add data labels to bars in a plot."""
+    for p in ax.patches:
+        ax.annotate(f'{p.get_height():{fmt}}', 
+                    (p.get_x() + p.get_width() / 2., p.get_height()),
+                    ha='center', va='center', xytext=(0, 9), 
+                    textcoords='offset points', fontsize=10, fontweight='bold')
+
 # ------------------------------------------------------------
 # Load dataset
 # ------------------------------------------------------------
@@ -313,10 +321,11 @@ df_resilience.to_json(os.path.join(RESULTS_DIR, "resilience_analysis.json"), ori
 
 # Attack Detection Plot
 plt.figure(figsize=(10, 6))
-sns.barplot(x="config", y="attack_detection_rate", data=df_resilience)
+ax = sns.barplot(x="config", y="attack_detection_rate", data=df_resilience)
+add_labels(ax)
 plt.title("Sensor Spoofing Attack Detection Rate")
 plt.ylabel("Detection Probability")
-plt.ylim(0, 1.0)
+plt.ylim(0, 1.1)
 plt.savefig(os.path.join(RESULTS_DIR, "attack_detection_rate.png"), dpi=300, bbox_inches="tight")
 plt.close()
 
@@ -369,10 +378,11 @@ plt.close()
 # Success Rate Bar Plot
 plt.figure(figsize=(10, 6))
 success_rates = df.groupby("config")["success"].mean().reset_index()
-sns.barplot(x="config", y="success", data=success_rates)
+ax = sns.barplot(x="config", y="success", data=success_rates)
+add_labels(ax)
 plt.title("Mitigation Success Rate by Configuration")
 plt.ylabel("Success Probability")
-plt.ylim(0, 1.0)
+plt.ylim(0, 1.1)
 plt.savefig(os.path.join(RESULTS_DIR, "success_rate_barplot.png"), dpi=300, bbox_inches="tight")
 plt.close()
 

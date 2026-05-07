@@ -19,14 +19,14 @@
   },
   {
     "config":"dt_multi_no_chain",
-    "Total_Lifecycle_Cost":1389912000,
-    "Mean_Incident_Cost":386086.67,
-    "Std_Cost":644173.5600000001
+    "Total_Lifecycle_Cost":1407768000,
+    "Mean_Incident_Cost":391046.67,
+    "Std_Cost":647016.49
   },
   {
     "config":"agentic_full",
-    "Total_Lifecycle_Cost":1333440000,
-    "Mean_Incident_Cost":370400.0,
-    "Std_Cost":633308.02
+    "Total_Lifecycle_Cost":1364688000,
+    "Mean_Incident_Cost":379080.0,
+    "Std_Cost":638581.54
   }
 ]
