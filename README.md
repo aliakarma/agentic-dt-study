@@ -23,7 +23,7 @@
   <br/><br/>
   <a href="https://creativecommons.org/licenses/by/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey?style=for-the-badge&logo=creativecommons&logoColor=white" /></a>
   <a href="https://doi.org/10.5281/zenodo.18843087"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18843087-blue?style=for-the-badge&logo=zenodo&logoColor=white" /></a>
-  <img src="https://img.shields.io/badge/Manuscript-Under%20Review-orange?style=for-the-badge&logoColor=white" />
+  <a href="https://doi.org/10.1371/journal.pone.0353610"><img src="https://img.shields.io/badge/Paper-PLoS%20ONE-green?style=for-the-badge&logoColor=white" /></a>
   <br/><br/>
   <img src="https://img.shields.io/badge/Smart%20City-Infrastructure-1a73e8?style=flat-square&logo=cityMapper&logoColor=white" />
   <img src="https://img.shields.io/badge/Structural%20Health-Monitoring-2e7d32?style=flat-square&logoColor=white" />
@@ -35,7 +35,7 @@
     <strong>Supporting repository for:</strong><br/>
     <em>"Agentic AI-Enhanced Digital Twins for Smart City Civil Infrastructure:<br/>
     A Secure, Autonomous and Auditable Management Framework."</em><br/>
-    — Manuscript under review in PLOS ONE.
+    — Published in <em>PLOS ONE</em>.
   </blockquote>
 
   <p align="center">
@@ -60,6 +60,7 @@
 - [Statistical Analysis](#-statistical-analysis)
 - [Reproducibility Protocol](#-reproducibility-protocol)
 - [References](#-references)
+- [Citation](#-citation)
 - [License](#-license)
 
 ---
@@ -347,6 +348,26 @@ python analysis.py
 - **Strauss, A., et al.** (2008). Stochastic finite elements and experimental investigations of the durability of concrete structures. *Structural Safety*, 30(5), 380–395.
 
 </details>
+
+---
+
+## 📝 Citation
+
+If you find this work or dataset useful in your research, please cite our paper:
+
+```bibtex
+@article{syed2026agenticdt,
+  title={Agentic AI-enhanced digital twins for Smart City civil infrastructure: A secure, autonomous and auditable management framework},
+  author={Syed, Toqeer Ali and Akarma, Ali and Alatify, Ali and Naqash, Muhammad Tayyab and Alqurashi, Abdulaziz},
+  journal={PLoS One},
+  volume={21},
+  number={7},
+  pages={e0353610},
+  year={2026},
+  publisher={Public Library of Science},
+  doi={10.1371/journal.pone.0353610}
+}
+```
 
 ---
 
